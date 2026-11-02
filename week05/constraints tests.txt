@@ -1,0 +1,21 @@
+***TEST 1
+15:22:28	INSERT INTO Department (dept_name) VALUES (NULL)	Error Code: 1048. Column 'dept_name' cannot be null	0.000 sec
+
+---TEST 2
+15:24:01	INSERT INTO Course (course_code, course_title, credit_units) VALUES ('TST101', 'Test', 9)	Error Code: 3819. Check constraint 'chk_credit_units' is violated.	0.000 sec
+
+---TEST 3
+15:24:45	INSERT INTO Student (matric_no, full_name, dept_id) VALUES ('TEST001', 'Test', 999)	Error Code: 1452. Cannot add or update a child row: a foreign key constraint fails (`sen307_202411353`.`student`, CONSTRAINT `student_ibfk_1` FOREIGN KEY (`dept_id`) REFERENCES `department` (`dept_id`))	0.032 sec
+
+---TEST 4
+15:25:16	INSERT INTO Student (matric_no, full_name, gender) VALUES ('TEST002', 'Test', 'X')	Error Code: 1265. Data truncated for column 'gender' at row 1	0.000 sec
+
+---TEST 5 UNIQUE (should fail: dept_name must be unique)
+INSERT INTO Department (dept_name) VALUES ('Computer Science');
+INSERT INTO Department (dept_name) VALUES ('Computer Science');
+ERROR MESSAGE:
+15:30:00	INSERT INTO Department (dept_name) VALUES ('Computer Science')	Error Code: 1062. Duplicate entry 'Computer Science' for key 'department.dept_name'	0.015 sec
+
+
+-- Clean up afterwards
+DELETE FROM Department WHERE dept_name = 'Computer Science';
